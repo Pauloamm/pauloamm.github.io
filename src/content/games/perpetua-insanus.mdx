@@ -1,0 +1,126 @@
+---
+title: "Perpetua Insanus"
+cover: "../../assets/gamecovers/PerpetuaInsanusCover.png"
+shortDescription: "A survival horror game inspired by the likes of Resident Evil and Silent Hill, focusing on exploration and puzzle solving."
+category: "personal"
+engine: "Unity"
+skills: ["Unity", "C#", "Game AI", "State Machines", "Behaviour Trees", "A* Pathfinding", "Inventory System"]
+itchLink: "https://pauloamm.itch.io"
+githubLink: "https://github.com/Pauloamm"
+---
+
+import YouTubeEmbed from "../../components/mdx/YouTubeEmbed.astro";
+import TwoColumn from "../../components/mdx/TwoColumn.astro";
+import DiagramImage from "../../components/mdx/DiagramImage.astro";
+import interactionsHierarchy from "../../assets/PerpetuaInsanus/Diagrams/perpetua-interactions-hierarchy.png";
+import inventoryFlow from "../../assets/PerpetuaInsanus/Diagrams/perpetua-inventory-flow.png";
+import weaponsHierarchy from "../../assets/PerpetuaInsanus/Diagrams/perpetua-weapons-hierarchy.png";
+import itemHierarchy from "../../assets/PerpetuaInsanus/Diagrams/perpetua-item-hierarchy.png";
+import aiStateMachine from "../../assets/PerpetuaInsanus/Diagrams/perpetua-ai-state-machine.png";
+import aiBehaviourTree from "../../assets/PerpetuaInsanus/Diagrams/perpetua-ai-behaviour-tree.png";
+
+## Trailer
+
+<YouTubeEmbed id="6ZlD0HBxYx0" title="Perpetua Insanus - Official Trailer" />
+
+<TwoColumn>
+  <div>
+    ### Concept
+    Perpetua Insanus is a survival horror game in which the player needs to explore its environment to find out not only resources that help him stay safe but also the keys needed to advance.
+  </div>
+  <div>
+    ### Level Design
+    The map in this game is actually just a little of what we wanted it to be. With 3 months of development we had to cut it down so that the quality of the environment would stay as we wanted. With that in mind, we also made the map looping on itself so that it would feel like a real hospital floor and not a linear one.
+  </div>
+</TwoColumn>
+
+## Player Interactions
+
+<YouTubeEmbed id="fKz-UqIAFyo" title="Perpetua Insanus - Player Interaction Demo" />
+
+<TwoColumn>
+  <div>
+    In this game the player can interact in several different ways with the environment: dragging doors, drawers, pick ups...
+
+    Since more interactions could be added and the game could be expanded, we needed a solid base code in which would allow us to expand without needing to modify the foundation every single time. For that I implemented interfaces from which we could make the dependencies abstract instead of concrete so that any new interactable behaviour only needed to implement the respective interface with their own logic.
+  </div>
+  <DiagramImage
+    src={interactionsHierarchy}
+    alt="Interaction system class hierarchy"
+    caption="PlayerRaycast triggers IInteractable; DragDoor, DragDrawer, and DragRigidBody each implement it, alongside IPickupable for Item."
+  />
+</TwoColumn>
+
+<TwoColumn>
+  <div>
+    ## Inventory
+
+    <YouTubeEmbed id="tgWipxSXUoc" title="Perpetua Insanus - Inventory Demo" />
+
+    Being able to pick up and store items was one of our most important mechanics: keys, syringes, clues for puzzles, weapons... we had lots of items (and their quantities) and there could be a lot more added, so, just like the player interactions, I implemented a code structure capable of handling expansion without ruining its foundation while also being good performance wise, being approximately O(1) (C# Dictionaries).
+
+    <DiagramImage
+      src={inventoryFlow}
+      alt="Inventory data flow diagram"
+      caption="Inventory holds ISlot, which references IPickupable, implemented by Item."
+    />
+  </div>
+  <div>
+    ## Hierarchies
+
+    Having all these objects and weapons in mind, I designed and implemented hierarchies that allowed for abstract dependencies on interfaces or abstract classes which allowed the expansion of such systems.
+
+    ### Weapons Hierarchy
+
+    <DiagramImage
+      src={weaponsHierarchy}
+      alt="Weapons hierarchy diagram"
+      caption="Pistol, Shotgun, and Knife all extend a common Weapon base, implementing IInteractable, IPickupable, and IRechargeable."
+    />
+
+    Since this game was made in Unity Engine, I also wanted to take advantage of some of its functionalities, so the "item hierarchy" was only a class that implemented some interfaces with serialized fields which could be dragged and dropped in the inspector, making it a very generic one.
+
+    <DiagramImage
+      src={itemHierarchy}
+      alt="Item hierarchy diagram"
+      caption="Item implements both IInteractable and IPickupable."
+    />
+  </div>
+</TwoColumn>
+
+## AI
+
+<YouTubeEmbed id="yWmk3AdUcYU" title="Perpetua Insanus - Enemy AI Demo" />
+
+The enemies in this game have their AI implemented in two different ways for academic purposes:
+
+### State Machine with Decision Tree:
+
+<DiagramImage
+  src={aiStateMachine}
+  alt="State machine with decision tree diagram"
+  caption="Patrol, Chase, and Attack states, with a decision tree deciding between ranged and melee attacks."
+/>
+
+### Behaviour Tree:
+
+<DiagramImage
+  src={aiBehaviourTree}
+  alt="Behaviour tree diagram"
+  caption="Behaviour tree covering patrol, chase, and attack decision-making."
+/>
+
+These implementations were all based in abstract classes from which the more concrete behaviours can just inherit from them and implement their own concrete logic. This way the code can be reutilized in other projects by being very generic and flexible! (The decision tree used was pretty simple and could be made with an if statement but since I implemented the abstract classes I used them to showcase their potential)
+
+### What did I learn?
+
+- Structuring Code Diagrams/Logic
+- Using Events to separate Logic from UI
+- Structuring Hierarchies
+- Using Interfaces/Abstract Classes to make abstract dependencies and not repeat code
+- Using Guard clauses for cleaner code
+- Structuring State Machines
+- Structuring Decision Trees
+- Structuring Behaviour Trees
+- Pathfinding Algorithms (Dijkstra and A*)
+- Code Optimization
