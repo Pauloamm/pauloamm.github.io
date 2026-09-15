@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import { Image } from "astro:assets";
 import Header from "../../components/Header.astro";
 import Footer from "../../components/Footer.astro";
+import { siteConfig } from "../../config";
 import "../../styles/global.css";
 
 export async function getStaticPaths() {
@@ -15,31 +16,33 @@ export async function getStaticPaths() {
 
 const { game } = Astro.props;
 const { Content } = await game.render();
-const { title, cover, category, engine, skills, itchLink, githubLink } =
-  game.data;
+const { title, cover, category, engine, skills, itchLink, githubLink } = game.data;
 ---
 
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta name="color-scheme" content="dark" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title} | Paulo Macedo</title>
   </head>
   <body>
     <Header />
     <main class="max-w-4xl mx-auto px-6 sm:px-8 pt-24 sm:pt-32 pb-16">
-      <a href="/#projects" class="text-sm text-gray-500 hover:text-gray-800 transition-colors">
+      <a href="/#projects" class="text-sm text-[var(--color-text-subtle)] hover:text-[var(--color-text)] transition-colors">
         ← Back to Projects
       </a>
 
-      <div class="mt-4 rounded-xl sm:rounded-2xl overflow-hidden border border-gray-200">
-        <Image src={cover} alt={title} class="w-full h-auto" />
-      </div>
+      {cover && (
+        <div class="mt-4 rounded-xl sm:rounded-2xl overflow-hidden border border-[var(--color-border)]">
+          <Image src={cover} alt={title} class="w-full h-auto" />
+        </div>
+      )}
 
       <div class="mt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 class="text-3xl sm:text-4xl font-bold text-gray-900">{title}</h1>
-          <p class="text-sm text-gray-500 mt-1 capitalize">
+          <h1 class="text-3xl sm:text-4xl font-bold text-[var(--color-text)]">{title}</h1>
+          <p class="text-sm text-[var(--color-text-subtle)] mt-1 capitalize">
             {category}
             {engine && ` · ${engine}`}
           </p>
@@ -50,7 +53,8 @@ const { title, cover, category, engine, skills, itchLink, githubLink } =
               href={itchLink}
               target="_blank"
               rel="noopener noreferrer"
-              class="px-4 py-2 bg-gray-900 text-white rounded-lg text-sm font-medium hover:bg-gray-700 transition-colors"
+              class="px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity"
+              style={`background-color: ${siteConfig.accentColor}; color: #111111`}
             >
               Play on itch.io
             </a>
@@ -60,7 +64,7 @@ const { title, cover, category, engine, skills, itchLink, githubLink } =
               href={githubLink}
               target="_blank"
               rel="noopener noreferrer"
-              class="px-4 py-2 border border-gray-300 text-gray-800 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors"
+              class="px-4 py-2 rounded-lg text-sm font-medium transition-colors border border-[var(--color-border)] text-[var(--color-text-muted)] hover:bg-[var(--color-bg-card-hover)]"
             >
               View Repository
             </a>
@@ -71,7 +75,10 @@ const { title, cover, category, engine, skills, itchLink, githubLink } =
       {skills && skills.length > 0 && (
         <div class="flex flex-wrap gap-2 mt-4">
           {skills.map((skill: string) => (
-            <span class="px-3 py-1 bg-gray-100 text-gray-800 rounded-full text-sm font-medium">
+            <span
+              class="px-3 py-1 rounded-full text-sm font-medium"
+              style={`background-color: ${siteConfig.accentColor}1a; color: ${siteConfig.accentColor}; border: 1px solid ${siteConfig.accentColor}33`}
+            >
               {skill}
             </span>
           ))}

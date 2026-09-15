@@ -5,7 +5,7 @@ const games = defineCollection({
   schema: ({ image }) =>
     z.object({
       title: z.string(),
-      cover: image(),
+      cover: image().optional(),
       shortDescription: z.string(),
       category: z.enum(["personal", "gamejam", "professional"]),
       engine: z.string().optional(),

@@ -7,7 +7,7 @@ export const siteConfig = {
   name: "Paulo Macedo",
   title: "Gameplay Systems - Game AI - Unreal Engine - Unity | Software Developer",
   description: "Portfolio website of Paulo Macedo",
-  accentColor: "#1d4ed8",
+  accentColor: "#99a4ff",
   social: {
     email: "pauloammacedo@gmail.com",
     linkedin: "https://www.linkedin.com/in/pauloammacedo/",
@@ -15,31 +15,31 @@ export const siteConfig = {
     github: "https://github.com/Pauloamm",
   },
   aboutMe:
-    "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem quos asperiores nihil consequatur tempore cupiditate architecto natus commodi corrupti quas quasi facere est, dignissimos odit nam veniam sapiente ut, vitae eligendi ipsum dolor, nostrum ullam impedit! Corrupti ratione mollitia temporibus necessitatibus, consectetur reiciendis recusandae id, dolorum quaerat, vero pariatur. Ratione!",
+    "I'm a software developer with a Master's in Applied Artificial Intelligence and a Bachelor's in Digital Games Development Engineering, specializing in gameplay systems and game AI. At WaveFunctionVR, I built VR training applications, a drone flight simulator in Unreal Engine 4, and reusable libraries that cut project setup time by over 50%. My personal projects focus on [placeholder - varies per project] - and I've also taught game engine fundamentals and OOP to first-year students as an invited assistant professor. Outside of games, I've worked as a software developer at Deloitte, debugging and maintaining production database systems. Even though games are my specialty, they've given me the knowledge to architect clean code and scalable systems that translate directly into broader software engineering challenges.",
   skills: ["C#", "C++", "Unity", "Unreal Engine", "Game AI", "Gameplay Systems"],
   projects: [
     {
       name: "Perpetua Insanus",
       description:
         "A survival horror game inspired by the likes of Resident Evil and Silent Hill, focusing on exploration and puzzle solving.",
-      link: "https://pauloamm.itch.io",
+      link: "https://pauloamm.itch.io/perpetua-insanus",
+      slug: "perpetua-insanus",
       image: perpetuaInsanusCover,
       category: "personal",
       skills: ["Unity", "C#", "Game AI", "State Machines", "Behaviour Trees", "A* Pathfinding", "Inventory System"],
     },
     {
       name: "Iterum",
-      description:
-        "Add a short description of Iterum here.",
-      link: "https://pauloamm.itch.io",
+      description: "Iterum was my first Unity project and is a horror game, inspired by Silent Hill's P.T.",
+      link: "https://pauloamm.itch.io/iterum",
+      slug: "iterum",
       image: iterumCover,
       category: "personal",
-      skills: ["Unity", "C#"],
+      skills: ["Unity", "C#", "Events & Delegates", "Observer Pattern", "Decoupled Architecture", "Player Fear Pacing"],
     },
     {
       name: "Angel Chronicles",
-      description:
-        "Add a short description of Angel Chronicles here.",
+      description: "Add a short description of Angel Chronicles here.",
       link: "https://pauloamm.itch.io",
       image: angelChroniclesCover,
       category: "personal",
@@ -47,11 +47,10 @@ export const siteConfig = {
     },
     {
       name: "Through The Light",
-      description:
-        "Add a short description of Through The Light here.",
+      description: "Add a short description of Through The Light here.",
       link: "https://pauloamm.itch.io",
       image: throughTheLightCover,
-      category: "personal",
+      category: "gamejam",
       skills: ["Unity", "C#"],
     },
   ],
@@ -113,9 +112,7 @@ export const siteConfig = {
       school: "IPCA - Polytechnic Institute of Cávado and Ave",
       degree: "Bachelor's in Digital Games Development Engineering",
       dateRange: "June 2021",
-      achievements: [
-        "Graduated with a final grade of 17/20",
-      ],
+      achievements: ["Graduated with a final grade of 17/20"],
     },
   ],
 };

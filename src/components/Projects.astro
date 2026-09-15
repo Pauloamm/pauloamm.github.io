@@ -1,85 +1,96 @@
 ---
 import { Image } from "astro:assets";
 import { siteConfig } from "../config";
-const hasProjects = siteConfig.projects && siteConfig.projects.length > 0;
+
+const categoryLabels: Record<string, string> = {
+  gamejam: "GameJams",
+  personal: "Personal Projects",
+  professional: "Professional",
+};
+const categoryIds: Record<string, string> = {
+  gamejam: "gamejams",
+  personal: "projects",
+  professional: "professional",
+};
+const categoryOrder = ["gamejam", "personal", "professional"];
+
+const sections = categoryOrder
+  .map((cat) => ({
+    id: categoryIds[cat],
+    label: categoryLabels[cat] ?? cat,
+    items: siteConfig.projects.filter((p) => (p.category ?? "personal") === cat),
+  }))
+  .filter((section) => section.items.length > 0);
 ---
 
-{
-  hasProjects && (
-    <section id="projects" class="p-8 sm:p-12 md:p-16 lg:p-24">
-      <div>
-        <div class="mb-8 sm:mb-12">
-          <h2 class="text-3xl sm:text-4xl md:text-5xl xl:text-7xl font-bold text-gray-900">
-            Projects
-          </h2>
-          <div
-            class="w-[75px] h-[5px] mt-2 rounded-full"
-            style={`background-color: ${siteConfig.accentColor}`}
-          />
-        </div>
+{sections.map((section) => (
+  <section id={section.id} class="p-8 sm:p-12 md:p-16 lg:p-24">
+    <div>
+      <div class="mb-8 sm:mb-12">
+        <h2 class="text-3xl sm:text-4xl md:text-5xl xl:text-7xl font-bold text-[var(--color-text)]">
+          {section.label}
+        </h2>
+        <div class="w-[75px] h-[5px] mt-2 rounded-full" style={`background-color: ${siteConfig.accentColor}`} />
+      </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {siteConfig.projects.map((project) => {
-            const Component = project.link ? "a" : "div";
-            const linkProps = project.link
-              ? {
-                  href: project.link,
-                  target: "_blank",
-                  rel: "noopener noreferrer",
-                }
-              : {};
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        {section.items.map((project) => {
+          const href = project.slug ? `/games/${project.slug}` : project.link;
+          const isInternal = Boolean(project.slug);
+          const linkProps = href
+            ? isInternal
+              ? { href }
+              : { href, target: "_blank", rel: "noopener noreferrer" }
+            : {};
+          const Component = href ? "a" : "div";
 
-            return (
-              <div class="group relative">
-                <Component
-                  {...linkProps}
-                  class={`block relative overflow-hidden bg-gray-50 rounded-xl sm:rounded-2xl border border-gray-200 transition-[transform,box-shadow,border-color] duration-150 ease-out h-full transform-gpu ${
-                    project.link
-                      ? "hover:shadow-xl hover:border-gray-300 hover:-translate-y-1"
-                      : ""
-                  }`}
-                >
-                  {project.image && (
-                    <div class="w-full aspect-video overflow-hidden bg-gray-100">
-                      <Image
-                        src={project.image}
-                        alt={project.name}
-                        class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 transform-gpu"
-                        width={600}
-                        height={340}
-                      />
+          return (
+            <div class="group relative">
+              <Component
+                {...linkProps}
+                class={`block relative overflow-hidden rounded-xl sm:rounded-2xl border transition-[transform,box-shadow,border-color] duration-150 ease-out h-full transform-gpu bg-[var(--color-bg-card)] border-[var(--color-border)] ${
+                  href ? "hover:shadow-xl hover:shadow-black/40 hover:border-[var(--color-border-hover)] hover:-translate-y-1" : ""
+                }`}
+              >
+                {project.image && (
+                  <div class="w-full aspect-video overflow-hidden bg-[var(--color-bg-card-hover)]">
+                    <Image
+                      src={project.image}
+                      alt={project.name}
+                      class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 transform-gpu"
+                      width={600}
+                      height={340}
+                    />
+                  </div>
+                )}
+
+                <div class="p-4 sm:p-6 space-y-3">
+                  <h3 class="text-lg sm:text-xl font-bold text-[var(--color-text)]">
+                    {project.name}
+                  </h3>
+
+                  <p class="text-sm sm:text-base text-[var(--color-text-muted)] leading-relaxed">
+                    {project.description}
+                  </p>
+
+                  {project.skills && project.skills.length > 0 && (
+                    <div class="flex flex-wrap gap-1.5 sm:gap-2 pt-1">
+                      {project.skills.map((skill: string) => (
+                        <span
+                          class="px-2.5 py-1 rounded-md text-xs font-medium"
+                          style={`background-color: ${siteConfig.accentColor}1a; color: ${siteConfig.accentColor}; border: 1px solid ${siteConfig.accentColor}33`}
+                        >
+                          {skill}
+                        </span>
+                      ))}
                     </div>
                   )}
-
-                  <div class="p-4 sm:p-6 space-y-3">
-                    <h3 class="text-lg sm:text-xl font-bold text-gray-900">
-                      {project.name}
-                    </h3>
-
-                    <p class="text-sm sm:text-base text-gray-600 leading-relaxed">
-                      {project.description}
-                    </p>
-
-                    {project.skills && project.skills.length > 0 && (
-                      <div class="flex flex-wrap gap-1.5 sm:gap-2 pt-1">
-                        {project.skills.map((skill) => (
-                          <span
-                            class={`px-2.5 py-1 bg-gray-900 text-white rounded-md text-xs font-medium transition-all duration-300 ${
-                              project.link ? "group-hover:bg-gray-800" : ""
-                            }`}
-                          >
-                            {skill}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </Component>
-              </div>
-            );
-          })}
-        </div>
+                </div>
+              </Component>
+            </div>
+          );
+        })}
       </div>
-    </section>
-  )
-}
+    </div>
+  </section>
+))}

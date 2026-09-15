@@ -1,0 +1,58 @@
+---
+title: "Iterum"
+cover: "../../assets/gamecovers/IterumCover.png"
+shortDescription: "Iterum was my first Unity project and is a horror game, inspired by Silent Hill's P.T."
+category: "personal"
+engine: "Unity"
+skills: ["Unity", "C#", "Events & Delegates", "Observer Pattern", "Decoupled Architecture", "Player Fear Pacing"]
+itchLink: "https://pauloamm.itch.io/iterum"
+githubLink: "https://github.com/Pauloamm/Iterum"
+---
+
+import TwoColumn from "../../components/mdx/TwoColumn.astro";
+import DiagramImage from "../../components/mdx/DiagramImage.astro";
+import eventArchitecture from "../../assets/Iterum/Diagrams/iterum-event-architecture.png";
+
+<TwoColumn>
+  <div>
+    ### Concept
+
+    As my first Unity group project and as we loved horror games, especially Silent Hill's P.T., we decided to make one in the same style: looping in the same area. What makes our game different however is that in each loop one of the divisions open and the player needs to complete certain tasks for the final door in the loop hallway to open. (Also as our first game we did not make a trailer)
+
+    ### Event Architecture
+
+    As a game based on events on certain player positions/actions, this game based itself on triggers and events, decentralizing the code from the trigger itself and putting the logic on other objects.
+
+    <DiagramImage
+      src={eventArchitecture}
+      alt="Event architecture diagram"
+      caption="Trigger connects to PlaySound, CloseDoor, ChangeDoorTexture, and TurnOffLights."
+    />
+  </div>
+  <div>
+    ### Player's Fear
+
+    As our first horror game and as this game did not have many player interactions and was more about the experience, we had to search what would work to make the player feel the way we wanted.
+
+    With that we divided the loops in a way that each one had a purpose:
+
+    1st Loop - nothing happens, just to show the player the area he would be roaming.
+
+    2nd Loop - starting again at the beginning, setting the stage for something weird happening with a little movement far away so the player would start feeling anxious.
+
+    3rd Loop - forced the player to go close to a big silhouette, followed by a blackout, showing the player they were not in control and to confirm that there was something with them.
+
+    4th Loop - in this loop the player is already anxious, so we give them a lighter and make them encounter this silhouette up close with it while in a blackout.
+
+    5th Loop - this loop is a full blackout one, doesn't contain a real jumpscare but the previous aspects are enough to keep the player hesitating from moving forward.
+
+    6th Loop - as the last loop we focus on moving dolls (putting the dolls in the kid's bedroom to calm the spirit) making the player explore the area and finishing the game.
+  </div>
+</TwoColumn>
+
+### What did I learn?
+
+- Unity Engine Workflow
+- Unity Engine Library
+- Design Pattern: Observer Pattern
+- Improved coding skills by decoupling the logic from different loops with different events and different subscribers for each one

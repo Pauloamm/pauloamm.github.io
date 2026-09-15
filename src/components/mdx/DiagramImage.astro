@@ -12,6 +12,6 @@ const { src, alt, caption } = Astro.props;
 <figure class="mb-6">
   <Image src={src} alt={alt} class="w-full h-auto invert" />
   {caption && (
-    <figcaption class="text-sm text-gray-400 mt-2 text-center">{caption}</figcaption>
+    <figcaption class="text-sm text-[var(--color-text-subtle)] mt-2 text-center">{caption}</figcaption>
   )}
 </figure>
