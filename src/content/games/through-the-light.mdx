@@ -1,0 +1,71 @@
+---
+title: "Through The Light"
+cover: "../../assets/gamecovers/ThroughTheLightCover.png"
+shortDescription: "Through The Light was a small 5 people project made in Unreal Engine in under 72h for thatgamejam#01."
+category: "gamejam"
+engine: "Unreal Engine 5"
+skills: ["Unreal Engine 5", "C++", "Blueprints", "Component-Based Architecture", "Physics-Based Movement", "Events & Delegates", "2D/3D Hybrid Animation"]
+itchLink: "https://pauloamm.itch.io/through-the-light"
+githubLink: "https://github.com/Pauloamm/thatgamejam01_project"
+---
+
+import YouTubeEmbed from "../../components/mdx/YouTubeEmbed.astro";
+import TwoColumn from "../../components/mdx/TwoColumn.astro";
+import DiagramImage from "../../components/mdx/DiagramImage.astro";
+import abilitySystem from "../../assets/ThroughTheLight/Diagrams/through-the-light-ability-system.png";
+
+Through The Light was a small 5 people project made in Unreal Engine in under 72h for the [thatgamejam#01](https://itch.io/jam/thatgamejam01).
+
+<TwoColumn>
+  <div>
+    ### Concept
+
+    Through The Light is a small physics 2.5D platformer, mixing physics based movement with a beautifully handcrafted 2D and 3D scenario.
+
+    ### Ability System
+
+    <DiagramImage
+      src={abilitySystem}
+      alt="Ability system diagram"
+      caption="BaseAbility extends ActorComponent and implements IAbilityInterface; PushAroundAbility and PullAbility both implement IPushable."
+    />
+
+    The ability system is a generic and flexible system created for possible future expansion. We used C++ classes to define all the behaviour and functions, making use of inheritance and composition to make it the most decoupled and independent possible.
+  </div>
+  <div>
+    ### Level Design
+
+    The game contains 4 main areas initially designed for a progressive introduction of the physics abilities available. Due to time limitations and after gametesting we decided to give the player all the abilities in the beginning of the game, changing it from a linear progression to a fun sandbox to mess around with the movement.
+
+    <YouTubeEmbed id="0G3JgGTmkD8" title="Through The Light - Walkthrough #thatgamejam#01" />
+  </div>
+</TwoColumn>
+
+<TwoColumn>
+  <div>
+    ### Environment and Animations
+
+    All the art itself was hand drawn and hand modelled by our team. Since I was the only one proficient with game engines I was the one implementing them tho. For the 3D models a small trick was used - 2 different pieces, including a no collision scenario and a collision straight path for easier movement control and less variability, keeping everything tidy and under control.
+
+    For the 2D part I used the Unreal flipbooks, with a controller that changes the orientation and animation according to the velocity input for the player.
+  </div>
+  <div>
+    ### Movement System - Physics
+
+    The movement used in the character is a physics based movement, locked in the YZ axis plane:
+
+    - Impulse forces are applied to the character for pushing around and jumps
+    - For the pulling ability a continuous force is applied while the ability is being pressed
+
+    After extensive testing, we added a reset to the velocity when the player hits the ground (no slipping), and also made so that whenever he moves horizontally it would reset only the horizontal speed, making the movement more responsive while keeping the fun physics aspect.
+  </div>
+</TwoColumn>
+
+### Key Implementation Concepts
+
+- Unreal Engine's Base inheritance system
+- Unreal Engine's interface system (C++ and Blueprints)
+- Unreal Engine's Event/Delegates (C++ and Blueprints Event Dispatchers)
+- Unreal Engine's C++ -> Blueprint communication
+- Unreal Engine's Actor/SceneComponent Inheritance extension
+- Unreal Engine's 2D flipbook/sprites implementation

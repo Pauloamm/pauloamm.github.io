@@ -1,0 +1,64 @@
+---
+title: "Angel Chronicles"
+shortDescription: "Angel Chronicles is a Puzzle Platformer where the enemies are essential to solve the problems and help overcoming obstacles."
+category: "personal"
+engine: "Unity"
+skills: ["Unity", "C#", "Strategy Pattern", "Interfaces & Abstraction", "Level Design Framework"]
+itchLink: "https://fabiodanil.itch.io/angel-chronicles-school-project"
+githubLink: "https://github.com/Pauloamm/AngelChronicles"
+---
+
+import YouTubeEmbed from "../../components/mdx/YouTubeEmbed.astro";
+import TwoColumn from "../../components/mdx/TwoColumn.astro";
+import DiagramImage from "../../components/mdx/DiagramImage.astro";
+import enemiesBehaviour from "../../assets/AngelChronicles/Diagrams/angel-chronicles-enemies-behaviour.png";
+
+## Trailer
+
+<YouTubeEmbed id="80bFbkhzKoA" title="Angel Chronicles - Official Trailer" />
+
+<TwoColumn>
+  <div>
+    ### Concept
+
+    <YouTubeEmbed id="-LCEgb5gtEE" title="Angel Mechanic - Magnet Enemy" />
+
+    Angel Chronicles is a puzzle platform with an innovative mechanic: the enemies are not only a hazard but also the key itself for progression. The player can grab and throw the enemies to destroy others, to create platforms and even some of them can be consumed to give some special effect.
+  </div>
+  <div>
+    ### Level Design
+
+    Being a puzzle platformer, the levels must be well thought and designed in such a way not too be too challenging but at the same time not too boring and unappealing. With that in mind our level design was inspired by two major platformers: Mega Man and Super Mario Galaxy.
+
+    So, our level design was divided in 4 steps:
+
+    1. Introducing the mechanic in a safe environment so the player can play around and get used to it
+    2. Explore the mechanic and roll out new possibilities with it
+    3. Giving a challenge to the player to test its mastery of the mechanic
+    4. Introducing a twist in the final challenge
+
+    Having these steps as our "principles", we then did our best to design the levels (development time of 3 months made it very hard to implement correctly).
+
+    The enemies were also modelled in a very intuitive way, showing the player the mechanic they were gonna be responsible for simply by their looks and animation.
+  </div>
+</TwoColumn>
+
+### Enemies Behaviour System
+
+Since we didn't know how many enemies were going to exist nor the amount of mechanics, our code structure needed to be very expandable and very flexible for the future. With that in mind I implemented a code structure based on the Strategy Pattern to encapsulate the behaviours, making them very reusable and generic.
+
+<DiagramImage
+  src={enemiesBehaviour}
+  alt="Enemies behaviour system diagram"
+  caption="Enemy implements IThrowable, IGrabable, and IConsumable, each with concrete strategies (NormalThrow/SpikeThrow, NormalGrab/HelicopterGrab/SpikeGrab, SpawnPrefabConsume)."
+/>
+
+By using abstract classes and interfaces, we can create small classes responsible for some generic behaviour, implement the needed interface, making them reusable and making the base dependencies abstract.
+
+### Key Implementation Concepts
+
+- Picking on new ideas and implementing them as new mechanics (from idea to mechanic)
+- Level Design Conception (balance between challenge and frustration)
+- Design Pattern: Strategy Pattern
+- Encapsulating behaviours for easier testing and debug and more generic code to reutilize
+- Coding custom shaders using Unity Shader Lab (HLSL)

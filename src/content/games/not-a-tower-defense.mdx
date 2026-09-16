@@ -1,0 +1,120 @@
+---
+title: "Not A Tower Defense!"
+cover: "../../assets/gamecovers/NotATowerDefenseCover.png"
+shortDescription: "A top-down wave-survival game, solo developed for Brackeys Game Jam 2026.2 in 5 days, where your own turrets target you instead of the enemies."
+category: "gamejam"
+engine: "Unity"
+skills: ["Unity", "C#", "Factory Pattern", "Strategy Pattern", "Event-Driven Architecture", "Data-Driven Combat", "Enemy System", "Wave System", "Upgrade System", "Inheritance and Composition"]
+itchLink: "https://pauloamm.itch.io/not-a-tower-defense"
+githubLink: "https://github.com/Pauloamm/BrackeysGameJam2026_2_Project"
+---
+
+import DiagramImage from "../../components/mdx/DiagramImage.astro";
+import TwoColumn from "../../components/mdx/TwoColumn.astro";
+import combatSystem from "../../assets/NotATowerDefense/Diagrams/not-a-tower-defense-damage-system.png";
+import enemyBehaviour from "../../assets/NotATowerDefense/Diagrams/not-a-tower-defense-enemy-system.png";
+import enemyStats from "../../assets/NotATowerDefense/Diagrams/not-a-tower-defense-enemy-stats-system.png";
+import waveScaling from "../../assets/NotATowerDefense/Diagrams/not-a-tower-defense-spawners-system.png";
+import turretSystem from "../../assets/NotATowerDefense/Diagrams/not-a-tower-defense-turret-system.png";
+import cardPoolInheritance from "../../assets/NotATowerDefense/Diagrams/not-a-tower-defense-card-pool-inheritance.png";
+import upgradeCardSelection from "../../assets/NotATowerDefense/Diagrams/not-a-tower-defense-upgrade-card-selection-system.png";
+
+Not A Tower Defense! was a solo project made in Unity in under 5 days for [Brackeys Game Jam 2026.2](https://itch.io/jam/brackeys-16), under the theme "Trust No One."
+
+### Concept
+
+Not A Tower Defense! is a small top-down wave-survival where your own tools to survive are targeting you, not the enemies. Try to survive as long as you can while upgrading your turrets to take down enemies for you - but be careful, the stronger they get, the more danger you're in too.
+
+### Combat System
+
+<DiagramImage
+  src={combatSystem}
+  alt="Combat system diagram"
+  caption="All damage resolves through IDamageable and IShieldable, regardless of the source."
+/>
+
+To make the system as decoupled as possible, with the ability to add any number of new projectiles, enemies, etc. without touching existing code, every hit in the game, whether it's a turret shot hitting the player, an enemy shot hitting the player, or an enemy's contact damage hitting the player, resolves through the same two interfaces: **IDamageable** and **IShieldable**. Anything that can take damage implements **IDamageable**, anything that can hold a shield implements **IShieldable**. The projectiles themselves don't care what type of thing they're hitting, they only search for **IDamageable**.
+
+There is a single exception to this rule: contact damage. This type of damage checks directly for the player's tag, so enemies don't damage each other on contact - but once that check passes, **IDamageable** is still the component actually used to resolve the damage.
+
+This damage system also fires events, so other components like sound effect players or invincibility frame visual effects can hook into it cleanly without the damage logic itself knowing they exist.
+
+On the player side, **PlayerLifeManager** handles damage, shields and invincibility in one place: incoming damage first checks if the player is already invincible or dead, then tries to consume a shield before touching health at all. Even when a shield fully absorbs the hit, the same **OnDamaged** event still fires - which matters, because **PlayerInvincibilityEffect** listens to that one event to trigger its blink/invincibility window, so a shielded hit gets the same breathing room as a real one instead of leaving the player open to getting chain-hit right after.
+
+### Enemy Stats and Behaviours
+
+<TwoColumn>
+  <DiagramImage
+    src={enemyBehaviour}
+    alt="Enemy behaviour composition diagram"
+    caption="EnemyBase&lt;TStats&gt; holds shared health and contact damage; concrete types add only the behaviour components they need."
+  />
+  <DiagramImage
+    src={enemyStats}
+    alt="Enemy stats inheritance diagram"
+    caption="Each enemy type has its own ScriptableObject stats asset inheriting from a shared base."
+  />
+</TwoColumn>
+
+Since this prototype has potential to be expanded, every enemy type is built from a shared base plus small, swappable behaviour components instead of one big monolithic class per enemy. **EnemyBase&lt;TStats&gt;** holds what every enemy has in common - health and contact damage behaviour - and each concrete type (**RusherEnemy**, **ShooterEnemy**, **SkyCallerEnemy**) inherits from it and adds only the components it actually needs. A Rusher just needs to move toward the player, so it only holds a movement behaviour. A Shooter needs to move and fire, so it holds movement plus its own shooting behaviour. A Sky Caller swaps that shooting behaviour for a sky-calling one instead - plug-and-play, simple and reusable components.
+
+For the stats, the same pattern was used: each enemy type has its own ScriptableObject stats asset inheriting from a shared base, so a designer can tune Max Health, Move Speed and Contact Damage for every enemy type from one shared field, while each type keeps whatever extra stats are unique to it (Stop Distance, Fire Cooldown, AoE Radius, etc.) without cluttering the other types.
+
+### Wave Scaling
+
+<DiagramImage
+  src={waveScaling}
+  alt="Spawners and wave scaling diagram"
+  caption="Each enemy type has its own spawner inheriting from BaseSpawner, tracked by a shared WaveManager."
+/>
+
+For each enemy type there is a corresponding spawner, inheriting from a **BaseSpawner** class. At the start of each wave, each one is given a wave number and a budget for that wave. From there, each one is on its own: it spawns its respective enemies up to its own concurrent cap, and every time one of its own enemies dies, it backfills a replacement until its budget for that wave runs out. **WaveManager** just tracks a single combined counter across all three spawners and ends the wave once it hits zero - it doesn't know, nor is dependent on, how each type manages its own spawning internally.
+
+Since each wave increases in difficulty, there is a separate hierarchy for enemy scaling, holding how each enemy's stats scale according to the wave number. Because all of this lives in data instead of code, tuning the difficulty curve for any stat on any enemy is just a matter of changing numbers on an asset in the Inspector - no code changes required.
+
+### Turret System
+
+<DiagramImage
+  src={turretSystem}
+  alt="Turret system diagram"
+  caption="TurretManagerBase&lt;TStats, TTurret&gt; owns runtime stats and enforces each type's deployment cap."
+/>
+
+Similar to the enemies, the turret side follows the same shared-base idea. **TurretManagerBase&lt;TStats, TTurret&gt;** holds the runtime stats instance for that turret type, spawns and holds a queue of the actual turrets, and enforces each type's deployment cap by destroying the oldest one when a new one is placed past the limit. The turret itself never fetches its own stats - the manager is the one that updates them, injecting whichever stats object the manager currently owns. Each one just plugs in its own stats template and exposes one Add... method per upgrade card (system discussed in the next section) for that turret type - calling it mutates the manager's own stats, then pushes the change to every turret of that type already placed on screen, so upgrades apply instantly instead of only affecting turrets placed after the upgrade's been selected.
+
+Turrets themselves inherit from a base class **TurretBase&lt;TStats&gt;** which handles the shared cooldown timer and firing loop, and each concrete turret class only implements how it actually fires, decoupling it from the attacks themselves.
+
+Stats mirror the same shape - **TurretBaseStats** holds what every turret shares (damage, cooldown, projectile speed), and each type adds its own extra fields on top for whatever makes it unique (bounce count, pellet count, beam count, and so on).
+
+### Upgrade System
+
+<TwoColumn>
+  <DiagramImage
+    src={cardPoolInheritance}
+    alt="Card pool inheritance diagram"
+    caption="CardPoolCatalogBase builds and caches its card list; each concrete catalog only overrides how that list is built."
+  />
+  <DiagramImage
+    src={upgradeCardSelection}
+    alt="Upgrade card selection system diagram"
+    caption="CardSelectionManager triggers on wave end, drawing cards via RandomCardSelector and firing an event."
+  />
+</TwoColumn>
+
+The card system is split into two independent pieces - where the cards come from, and how a pick actually gets applied and shown - so each part can be as independent as it needs from the other.
+
+Every upgrade card is built from the same shared catalog: **CardPoolCatalogBase** builds its list of **UpgradeCards** once and caches it, and each concrete catalog (one per turret type, plus one for the player) only has to override how that list gets built, referencing its own respective manager. An **UpgradeCard** itself is a plain object holding just a title, description and a closure to call when picked - there's no switch statement or lookup table anywhere enclosing the responsibility for the card itself.
+
+Picking a card is handled by **CardSelectionManager**, which triggers when a wave ends, asks **RandomCardSelector** to draw from all the catalogs, and fires an event with the drawn cards. From there, everything that needs to react to a card screen opening or closing - pausing the game, disabling input, showing the actual card UI - subscribes to that same event independently, with no direct references to each other. This keeps the core upgrade logic completely decoupled from anything UI or input related.
+
+### Key Implementation Concepts
+
+- Using abstract classes and interfaces to decouple systems and improve encapsulation
+- Using Events to separate core logic from UI, input and audio
+- Structuring generic base classes (**TurretManagerBase&lt;TStats, TTurret&gt;**, **EnemyBase&lt;TStats&gt;**) to share behaviour across types
+- Using ScriptableObjects as data-driven stat templates instead of hardcoded values
+- Structuring inheritance hierarchies for stats and scaling
+- Balancing Inheritance vs Composition in the same system
+- Using the Factory pattern for spawning and configuring objects
+- Using the Strategy pattern for interchangeable behaviour (scaling curves, upgrade effects)
+- Designing decoupled event architecture (multiple independent listeners reacting to the same event)

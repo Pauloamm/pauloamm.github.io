@@ -2,6 +2,7 @@ import perpetuaInsanusCover from "./assets/gamecovers/PerpetuaInsanusCover.png";
 import iterumCover from "./assets/gamecovers/IterumCover.png";
 import angelChroniclesCover from "./assets/gamecovers/AngelCroniclesCover.png";
 import throughTheLightCover from "./assets/gamecovers/ThroughTheLightCover.png";
+import notATowerDefenseCover from "./assets/gamecovers/NotATowerDefenseCover.png";
 
 export const siteConfig = {
   name: "Paulo Macedo",
@@ -39,19 +40,30 @@ export const siteConfig = {
     },
     {
       name: "Angel Chronicles",
-      description: "Add a short description of Angel Chronicles here.",
-      link: "https://pauloamm.itch.io",
+      description: "Angel Chronicles is a Puzzle Platformer where the enemies are essential to solve the problems and help overcoming obstacles.",
+      link: "https://fabiodanil.itch.io/angel-chronicles-school-project",
+      slug: "angel-chronicles",
       image: angelChroniclesCover,
       category: "personal",
-      skills: ["Unity", "C#"],
+      skills: ["Unity", "C#", "Strategy Pattern", "Interfaces & Abstraction", "Level Design Framework"],
     },
     {
       name: "Through The Light",
-      description: "Add a short description of Through The Light here.",
-      link: "https://pauloamm.itch.io",
+      description: "Through The Light was a small 5 people project made in Unreal Engine in under 72h for thatgamejam#01.",
+      link: "https://pauloamm.itch.io/through-the-light",
+      slug: "through-the-light",
       image: throughTheLightCover,
       category: "gamejam",
-      skills: ["Unity", "C#"],
+      skills: ["Unreal Engine 5", "C++", "Blueprints", "Component-Based Architecture", "Physics-Based Movement", "Events & Delegates", "2D/3D Hybrid Animation"],
+    },
+    {
+      name: "Not A Tower Defense!",
+      description: "A top-down wave-survival game, solo developed for Brackeys Game Jam 2026.2 in 5 days, where your own turrets target you instead of the enemies.",
+      link: "https://pauloamm.itch.io/not-a-tower-defense",
+      slug: "not-a-tower-defense",
+      image: notATowerDefenseCover,
+      category: "gamejam",
+      skills: ["Unity", "C#", "Factory Pattern", "Strategy Pattern", "Event-Driven Architecture", "Data-Driven Combat", "Enemy System", "Wave System", "Upgrade System", "Inheritance and Composition"],
     },
   ],
   experience: [
