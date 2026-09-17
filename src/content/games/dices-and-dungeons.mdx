@@ -1,0 +1,51 @@
+---
+title: "D&D - Dices and Dungeons"
+cover: "../../assets/gamecovers/DicesAndDungeonsCover.png"
+shortDescription: "A first-person wave-survival game where random dice, each with a different effect, are your only weapon. Made in 48 hours for GMTK Game Jam 2022."
+category: "gamejam"
+engine: "Unity"
+skills: ["Unity", "C#", "Inheritance & Polymorphism", "Interfaces", "Steering Behaviour", "Seek", "Separation"]
+itchLink: "https://joao13soares.itch.io/dicesanddungeons"
+githubLink: "https://github.com/Pauloamm/DD_DicesAndDungeons"
+---
+
+import DiagramImage from "../../components/mdx/DiagramImage.astro";
+import diceInheritance from "../../assets/DicesAndDungeons/Diagrams/dices-and-dungeons-dice-inheritance.png";
+import waveSystem from "../../assets/DicesAndDungeons/Diagrams/dices-and-dungeons-wave-system.png";
+
+D&D - Dices and Dungeons was a 4-person project made in Unity in 48 hours for [GMTK Game Jam 2022](https://itch.io/jam/gmtk-jam-2022), under the jam's theme "Roll of the Dice" - with over 6,000 entries, this was the largest game jam in itch.io's history at the time. For this project my contributions were the dice inheritance/polymorphism system and the wave spawning system.
+
+### Concept
+
+Dices and Dungeons is a first-person wave-survival game where your only weapons are dice. With different types and different faces to roll - the "power level" - throw them at enemies and try to survive six increasingly difficult waves to win.
+
+### Dice System
+
+<DiagramImage
+  src={diceInheritance}
+  alt="Dice inheritance hierarchy diagram"
+  caption="Every dice type inherits from Dice, which itself inherits from FloatingItem. DicesInventory only ever depends on the shared Dice type."
+/>
+
+Since it was a low time jam, the dice system needed to be easy to tweak if new dice ideas appeared at the last minute. As such, a good inheritance and polymorphism structure was needed to make expansion easy. To that end, a FloatingItem base class handles nothing but the idle bob-and-spin every pickup does, and the Dice class builds on top of it to add the rolled value, the throw impulse, and collision resolution against anything implementing IHittable. From there, 9 dice types - BombDice, FreezeDice, StickyDice, BlackHoleDice, TeleportDice, JumpDice, MachineGunDice, RandomDice, and NormalDice - each override a single method to add their own effect, so adding another die never means touching the throw or collision code.
+
+Complementing it, DicesInventory holds a pool of dice prefabs and only ever depends on the shared Dice type - it spawns whichever one is equipped and reads its sprite and effect straight off that base class, without needing to know which concrete dice it's holding or its specific behaviour.
+
+### Enemy & Wave System
+
+<DiagramImage
+  src={waveSystem}
+  alt="Wave, spawner and enemy flow diagram"
+  caption="WaveManager tells a Spawner how tough an enemy should be; the resulting Enemy implements IHittable and seeks the player."
+/>
+
+Despite only having a single enemy type, we needed a wave system to easily test, tweak and balance. A WaveManager steps through six hand-tuned waves, each defining an enemy count, an HP range, and how many spawners are active. Spawners are kept deliberately independent - WaveManager just tells one "spawn an enemy with this much HP" and moves on, so the spawners have no knowledge of wave difficulty or pacing.
+
+On the enemy logic, rather than just walking straight at the player, each enemy blends two forces every frame: a pull toward the player, and a separation force pushing it away from nearby enemies - a small flocking behaviour that keeps enemies from stacking on top of each other once a wave gets crowded.
+
+### Key Implementation Concepts
+
+- Using inheritance and an interface (IHittable) to decouple the dice from anything they can hit
+- Structuring one-effect-per-subclass dice types so new weapons don't require touching shared code
+- Basic steering (seek + separation) for enemy movement
+- Deliberately independent spawners driven by a central WaveManager

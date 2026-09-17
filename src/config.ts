@@ -3,6 +3,7 @@ import iterumCover from "./assets/gamecovers/IterumCover.png";
 import angelChroniclesCover from "./assets/gamecovers/AngelCroniclesCover.png";
 import throughTheLightCover from "./assets/gamecovers/ThroughTheLightCover.png";
 import notATowerDefenseCover from "./assets/gamecovers/NotATowerDefenseCover.png";
+import dicesAndDungeonsCover from "./assets/gamecovers/DicesAndDungeonsCover.png";
 
 export const siteConfig = {
   name: "Paulo Macedo",
@@ -64,6 +65,15 @@ export const siteConfig = {
       image: notATowerDefenseCover,
       category: "gamejam",
       skills: ["Unity", "C#", "Factory Pattern", "Strategy Pattern", "Event-Driven Architecture", "Data-Driven Combat", "Enemy System", "Wave System", "Upgrade System", "Inheritance and Composition"],
+    },
+    {
+      name: "D&D - Dices and Dungeons",
+      description: "A first-person wave-survival game where random dice, each with a different effect, are your only weapon. Made in 48 hours for GMTK Game Jam 2022.",
+      link: "https://joao13soares.itch.io/dicesanddungeons",
+      slug: "dices-and-dungeons",
+      image: dicesAndDungeonsCover,
+      category: "gamejam",
+      skills: ["Unity", "C#", "Inheritance & Polymorphism", "Interfaces", "Steering Behaviour", "Seek", "Separation"],
     },
   ],
   experience: [
