@@ -4,6 +4,7 @@ import angelChroniclesCover from "./assets/gamecovers/AngelCroniclesCover.png";
 import throughTheLightCover from "./assets/gamecovers/ThroughTheLightCover.png";
 import notATowerDefenseCover from "./assets/gamecovers/NotATowerDefenseCover.png";
 import dicesAndDungeonsCover from "./assets/gamecovers/DicesAndDungeonsCover.png";
+import noMoreOvertimeCover from "./assets/gamecovers/NoMoreOvertimeCover.png";
 
 export const siteConfig = {
   name: "Paulo Macedo",
@@ -74,6 +75,15 @@ export const siteConfig = {
       image: dicesAndDungeonsCover,
       category: "gamejam",
       skills: ["Unity", "C#", "Inheritance & Polymorphism", "Interfaces", "Steering Behaviour", "Seek", "Separation"],
+    },
+    {
+      name: "No More Overtime!",
+      description: "A 2D platformer made in Unity in 3 days for GMTK Game Jam 2026, where your only weapon is a shield that's also a ticking bomb.",
+      link: "https://pauloamm.itch.io/no-more-overtime",
+      slug: "no-more-overtime",
+      image: noMoreOvertimeCover,
+      category: "gamejam",
+      skills: ["Unity", "C#", "Strategy Pattern", "Input Abstraction", "Combat System", "Shield System", "Animation-Driven Combat", "Variable Jump Height"],
     },
   ],
   experience: [
